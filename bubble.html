@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+
+<style>
+    .dropbtn {
+      background-color: #3498DB;
+      color: white;
+      padding: 16px;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .dropbtn:hover, .dropbtn:focus {
+      background-color: #2980B9;
+    }
+    
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: #f1f1f1;
+      min-width: 160px;
+      overflow: auto;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+    
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+    
+    .dropdown a:hover {background-color: #ddd;}
+    
+    .show {display: block;}
+    </style>
+<div class="dropdown">
+    <!-- <div class="select" style="width: 200px;">
+        
+        <select id = "bubbleChartSelectAttr" onchange = "changeStackCountry()" >
+        </select>
+      </div>
+      <div class="select" style="width: 200px;">
+        
+        <select id = "bubbleChartSelectYear" onchange = "changeStackCountry()" >
+        </select>
+      </div> -->
+      <h2 style="text-align: center;">Group Visualization</h2>
+      <div id="write here for the world map" style="text-align: center;font-size: large;" ><pre>
+        In this visualisation we are comparing some of the most influential groups of countries like the
+        European Union (EU), BRICS, G20. The countries are grouped by color and each country's
+        parameter can be compared with another country’s by dragging it next to the country of interest   which helps in comparative studies.
+      </pre>
+      </div>
+      <div style="display: flex;">
+        <div style="width: 300px;"></div>
+          <label for="bar_country">
+            Select A Parameter:&nbsp;
+          </label>
+        <div style="text-align: center;" class="select">
+    
+          <select id = "bubbleChartSelectAttr" onchange = "changeStackCountry()" >
+            </select>
+          </div>
+          <div style="width:100px;"></div>
+          <label for="bar_attribute">
+            Select An Year:&nbsp;
+          </label>
+            <div style="text-align: center;" class="select">
+            <select id = "bubbleChartSelectYear" onchange = "changeStackCountry()" >
+            </select>
+            </div>
+      </div>
+    
+  </div>
+
+<svg width="1550" height="650" id="ClusterBubble"></svg>
+
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://unpkg.com/@popperjs/core@2/dist/umd/popper.min.js"></script>
+<script src="https://unpkg.com/tippy.js@6/dist/tippy-bundle.umd.js"></script>
+<script src="index.js"></script>
+<link href="world_map.css" rel="stylesheet">
+
+<script>
+    /* When the user clicks on the button, 
+    toggle between hiding and showing the dropdown content */
+    // function myFunction() {
+    //   document.getElementById("myDropdown").classList.toggle("show");
+    // }
+    
+    // // Close the dropdown if the user clicks outside of it
+    // window.onclick = function(event) {
+    //   if (!event.target.matches('.dropbtn')) {
+    //     var dropdowns = document.getElementsByClassName("dropdown-content");
+    //     var i;
+    //     for (i = 0; i < dropdowns.length; i++) {
+    //       var openDropdown = dropdowns[i];
+    //       if (openDropdown.classList.contains('show')) {
+    //         openDropdown.classList.remove('show');
+    //       }
+    //     }
+    //   }
+    // }
+    var attributes = [
+  'GDP','GDP (Adjusted to PPP)',
+  'Per Capita Income','Unemployement Rate','Inflation Rate','Debt (As Percentage Of GDP)',
+]
+var years = [
+  '2008','2009','2010','2011','2012',
+  '2013','2014','2015','2016','2017',
+  '2018','2019','2020', '2021'
+]
+var optionForAttribute = document.getElementById('bubbleChartSelectAttr')
+var optionForYear = document.getElementById('bubbleChartSelectYear')
+attributes.forEach((e)=>{
+  var newnode = document.createElement('option')
+
+  newnode.innerHTML = e 
+  newnode.id = e 
+
+  optionForAttribute.append(
+    newnode 
+  )
+})
+
+years.forEach((e)=>{
+  var newnode = document.createElement('option')
+
+  newnode.innerHTML = e 
+  newnode.id = e 
+
+  optionForYear.append(
+    newnode 
+  )
+})
+
+function changeStackCountry(){
+    var mylist = document.getElementById("bubbleChartSelectAttr");
+    var selectedAttributes = mylist.options[mylist.selectedIndex].text;
+    
+    mylist = document.getElementById("bubbleChartSelectYear");
+    var selectedYear = mylist.options[mylist.selectedIndex].text;
+
+    svg.selectAll('g').remove();
+
+    EU_Parent(selectedAttributes,selectedYear) 
+}
+
+</script>
